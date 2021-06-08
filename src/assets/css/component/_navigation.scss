@@ -1,0 +1,7 @@
+.nav {
+  @apply bg-blue-400 h-9 w-screen;
+
+  &__brand {
+    @apply text-white;
+  }
+}
