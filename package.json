@@ -1,7 +1,7 @@
 {
   "name": "helios-launcher",
   "productName": "helios-launcher",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {

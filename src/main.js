@@ -3,10 +3,14 @@ import Messenger from "./lib/messenger";
 import Downloader from "./lib/downloader";
 
 const {app, BrowserWindow, autoUpdater, dialog} = require('electron');
-const server = 'http://server.jvar.nl:8123'
-const url = `${server}/update/${process.platform}/${app.getVersion()}`
+const server = 'http://server.jvar.nl:8123';
+const url = `${server}/update/${process.platform}/${app.getVersion()}`;
 
-autoUpdater.setFeedURL({ url })
+autoUpdater.setFeedURL({url});
+
+setInterval(() => {
+    autoUpdater.checkForUpdates()
+}, 60000);
 
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
     app.quit();
@@ -23,10 +27,9 @@ autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
 
     dialog.showMessageBox(dialogOpts).then((returnValue) => {
         if (returnValue.response === 0) autoUpdater.quitAndInstall()
-    })
-})
+    });
+});
 
-app.applicationMenu && app.applicationMenu.setApplicationMenu(null);
 app.whenReady().then(() => {
     installExtension(VUEJS_DEVTOOLS)
         .then((name) => console.log(`Added Extension:  ${name}`))
