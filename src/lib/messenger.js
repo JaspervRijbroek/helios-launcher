@@ -2,7 +2,7 @@ const electron = require('electron');
 const {EventEmitter} = require('events');
 
 export default class Messenger extends EventEmitter {
-    constructor(arg) {
+    constructor(arg = null) {
         super();
 
         this.isMain = require('electron').hasOwnProperty('ipcMain');
@@ -12,10 +12,6 @@ export default class Messenger extends EventEmitter {
         // Else we get a store and we use the ipcRenderer.
         this.messenger = this.isMain ? arg.webContents : electron.ipcRenderer;
         this.receiver = this.isMain ? electron.ipcMain : electron.ipcRenderer;
-
-        this.store = !this.isMain ? arg : false;
-
-        console.log(this.isMain, this.messenger);
 
         this.receiver.on(this.channel, (event, [message, ...data]) => {
             this.emit(message, ...data);

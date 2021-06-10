@@ -28,6 +28,7 @@ export default class Downloader {
         // Check if all the files are there.
         // Also do a check on the size of the download file.
         if(existsSync(this.unpackPath + '/NFSW/nfsw.exe')) {
+            this.isWorking = false;
             return this.messenger.send('client:ready');
         }
 

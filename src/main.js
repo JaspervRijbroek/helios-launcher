@@ -35,8 +35,8 @@ app.whenReady().then(() => {
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
-        width: 550,
-        height: 180,
+        width: 325,
+        height: 325,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
@@ -46,6 +46,7 @@ const createWindow = () => {
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
     mainWindow.webContents.openDevTools();
+    mainWindow.setMenuBarVisibility(false);
 
     let messenger = new Messenger(mainWindow),
         downloader = new Downloader(messenger);
