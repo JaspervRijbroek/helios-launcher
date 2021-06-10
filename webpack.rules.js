@@ -17,22 +17,15 @@ module.exports = [
     },
   },
   {
-    test: /\.jsx?$/,
-    use: {
-      loader: 'babel-loader',
-      options: {
-        exclude: /node_modules/,
-        presets: ['@babel/preset-react']
-      }
-    }
+    test: /\.vue$/,
+    loader: 'vue-loader'
   },
   {
-    test: /\.scss$/i,
-    use: [
-      "style-loader",
-      "css-loader",
-      "postcss-loader",
-      "sass-loader",
-    ]
+    test: /\.js$/,
+    loader: 'babel-loader'
+  },
+  {
+    test: /\.css$/,
+    use: ["style-loader"],
   }
 ];

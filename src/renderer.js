@@ -26,10 +26,36 @@
  * ```
  */
 
-import './assets/css/index.scss';
+import Vue from "vue/dist/vue.esm.browser";
+import Vuex from 'vuex/dist/vuex.esm.browser'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import App from './components/App'
+import IpcHandler from './store/plugin/ipcHandler';
 
-import * as ReactDOM from "react-dom";
-import * as React from "react";
-import App from "./App";
+Vue.use(Vuex);
 
-ReactDOM.render(<App />, document.querySelector('#root'));
+const store = new Vuex.Store({
+    plugins: [IpcHandler],
+    state: {
+        showProgress: false,
+        percentage: 0,
+        progressMessage: '',
+        gamePath: '/var/game'
+    },
+    mutations: {
+        showProgress(state, show = false) {
+            state.showProgress = show;
+        }
+    },
+    actions: {
+        selectPath() {
+            // ipcRenderer.emit('')?
+        }
+    }
+})
+
+new Vue({
+    el: '#root',
+    render: h => h(App),
+    store
+})

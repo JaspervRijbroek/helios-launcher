@@ -1,4 +1,5 @@
 const rules = require('./webpack.rules');
+const { VueLoaderPlugin } = require('vue-loader')
 
 rules.push({
   test: /\.css$/,
@@ -11,7 +12,11 @@ module.exports = {
     rules,
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.json', '.wasm']
+    extensions: ['.js', '.vue', '.json', '.wasm']
   },
+  plugins: [
+    // make sure to include the plugin!
+    new VueLoaderPlugin()
+  ],
   target: 'electron-renderer'
 };
