@@ -51,8 +51,9 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools();
     mainWindow.setMenuBarVisibility(false);
 
-    let messenger = new Messenger(mainWindow),
-        downloader = new Downloader(messenger, launcher);
+    let messenger = new Messenger(mainWindow);
+
+    new Downloader(messenger);
 };
 
 app.on('ready', createWindow);

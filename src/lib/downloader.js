@@ -7,27 +7,18 @@ import {pipeline} from 'stream';
 import {spawn} from 'child_process';
 
 export default class Downloader {
-    constructor(messenger, launcher) {
+    constructor(messenger) {
         this.tempFile = app.getPath('temp') + '/nfsw.tgz';
         this.unpackPath = app.getPath('documents');
         this.downloadUrl = 'http://server.jvar.nl/NFSW.tgz';
         this.messenger = messenger;
         this.isWorking = false;
-        this.launcher = launcher;
 
         messenger
             .on('app:started', this.appStarted.bind(this))
             .on('download:start', this.download.bind(this))
             .on('unpack:start', this.unpack.bind(this))
-            .on('launch:game', this.launchGame.bind(this));
-
-        launcher
-            .on('game:launched', () => {
-
-            })
-            .on('game:stopped', () => {
-                this.messenger.send('client:running', false);
-            })
+            .on('client:launch', this.launchGame.bind(this));
     }
 
     async appStarted() {
@@ -125,7 +116,8 @@ export default class Downloader {
     }
 
     launchGame(username, password) {
-        let process = spawn(`${this.unpackPath}/NFSW/nfsw.exe`, ['US', 'http://server.jvar.nl:3000', username, password]);
+        console.log('Called');
+        let process = spawn(`${this.unpackPath}/NFSW/nfsw.exe`, ['US', 'http://server.jvar.nl:3000/', username, password]);
         process
             .on('spawn', () => {
                 this.messenger.send('client:running', true);

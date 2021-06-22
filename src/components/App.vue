@@ -8,23 +8,25 @@
           </p>
 
           <div class="card" style="margin: 0 auto;">
-            <div class="card-body">
-              <div class="card-text">
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="username" placeholder="Username" v-model="username">
-                  <label for="username">Username</label>
-                </div>
-                <div class="form-floating mb-3">
-                  <input type="password" class="form-control" id="password" placeholder="Password" v-model="password">
-                  <label for="password">Password</label>
+            <form v-on:submit="launch">
+              <div class="card-body">
+                <div class="card-text">
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="username" placeholder="Username" v-model="username">
+                    <label for="username">Username</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="password" placeholder="Password" v-model="password">
+                    <label for="password">Password</label>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="card-footer text-end">
-              <button class="btn btn-block btn-success" :disabled="isDisabled">
-                {{ message }}
-              </button>
-            </div>
+              <div class="card-footer text-end">
+                <button class="btn btn-block btn-success" :disabled="isDisabled" type="submit">
+                  {{ message }}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -78,6 +80,7 @@ export default {
         return;
       }
 
+      console.log('Called');
       messenger.send('client:launch', this.username, this.password);
     }
   }
