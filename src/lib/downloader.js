@@ -4,22 +4,34 @@ import {app} from 'electron';
 import * as through2 from 'through2';
 import {extract} from 'tar';
 import {pipeline} from 'stream';
+import {spawn} from 'child_process';
 
 export default class Downloader {
-    constructor(messenger) {
+    constructor(messenger, launcher) {
         this.tempFile = app.getPath('temp') + '/nfsw.tgz';
         this.unpackPath = app.getPath('documents');
         this.downloadUrl = 'http://server.jvar.nl/NFSW.tgz';
         this.messenger = messenger;
         this.isWorking = false;
+        this.launcher = launcher;
 
-        messenger.on('app:started', this.appStarted.bind(this));
-        messenger.on('download:start', this.download.bind(this));
-        messenger.on('unpack:start', this.unpack.bind(this));
+        messenger
+            .on('app:started', this.appStarted.bind(this))
+            .on('download:start', this.download.bind(this))
+            .on('unpack:start', this.unpack.bind(this))
+            .on('launch:game', this.launchGame.bind(this));
+
+        launcher
+            .on('game:launched', () => {
+
+            })
+            .on('game:stopped', () => {
+                this.messenger.send('client:running', false);
+            })
     }
 
     async appStarted() {
-        if(this.isWorking) {
+        if (this.isWorking) {
             return;
         }
 
@@ -27,12 +39,12 @@ export default class Downloader {
 
         // Check if all the files are there.
         // Also do a check on the size of the download file.
-        if(existsSync(this.unpackPath + '/NFSW/nfsw.exe')) {
+        if (existsSync(this.unpackPath + '/NFSW/nfsw.exe')) {
             this.isWorking = false;
             return this.messenger.send('client:ready');
         }
 
-        if(existsSync(this.tempFile) && await this.checkDownloadSize()) {
+        if (existsSync(this.tempFile) && await this.checkDownloadSize()) {
             return this.messenger.emit('unpack:start');
         }
 
@@ -50,7 +62,7 @@ export default class Downloader {
             }),
             self = this;
 
-        if(targetExists) {
+        if (targetExists) {
             fileSize = statSync(this.tempFile).size;
         }
 
@@ -60,17 +72,17 @@ export default class Downloader {
                     'Range': `bytes=${fileSize}-`
                 }
             }),
-            through2(function(chunk, enc, callback) {
+            through2(function (chunk, enc, callback) {
                 fileSize += chunk.length;
 
-                self.messenger.send('status:update', 'Downloading', (fileSize/downloadSize*100).toFixed(0));
+                self.messenger.send('status:update', 'Downloading', (fileSize / downloadSize * 100).toFixed(0));
 
                 this.push(chunk);
 
                 callback();
             }),
             targetFile,
-            function() {
+            function () {
                 self.messenger.emit('unpack:start');
             }
         );
@@ -85,7 +97,7 @@ export default class Downloader {
             file: this.tempFile,
             cwd: app.getPath('documents'),
             onentry: (entry) => {
-                if(entry.type === 'File') {
+                if (entry.type === 'File') {
                     passedFiles++
                     self.messenger.send('status:update', 'Unpacking', (passedFiles / files * 100).toFixed(0));
                 }
@@ -110,5 +122,16 @@ export default class Downloader {
         });
 
         return response.headers["content-length"];
+    }
+
+    launchGame(username, password) {
+        let process = spawn(`${this.unpackPath}/NFSW/nfsw.exe`, ['US', 'http://server.jvar.nl:3000', username, password]);
+        process
+            .on('spawn', () => {
+                this.messenger.send('client:running', true);
+            })
+            .on('exit', () => {
+                this.messenger.send('client:running', false);
+            })
     }
 }

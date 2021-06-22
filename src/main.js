@@ -52,7 +52,7 @@ const createWindow = () => {
     mainWindow.setMenuBarVisibility(false);
 
     let messenger = new Messenger(mainWindow),
-        downloader = new Downloader(messenger);
+        downloader = new Downloader(messenger, launcher);
 };
 
 app.on('ready', createWindow);
