@@ -19,6 +19,7 @@
                     <input type="password" class="form-control" id="password" placeholder="Password" v-model="password">
                     <label for="password">Password</label>
                   </div>
+                  <ServerList v-on:change-server="setServer" />
                 </div>
               </div>
               <div class="card-footer text-end">
@@ -35,6 +36,8 @@
 
 <script>
 import Messenger from "../lib/messenger";
+import ServerList from './ServerList';
+
 const messenger = new Messenger();
 
 export default {
@@ -59,10 +62,13 @@ export default {
     progressPercentage: '',
     username: '',
     password: '',
+    server: null
   }),
   computed: {
     isDisabled() {
-      return this.isRunning || !this.isDone;
+      console.log(this.server);
+
+      return !this.server || this.isRunning || !this.isDone;
     },
     message() {
       if(this.isDone) {
@@ -75,14 +81,21 @@ export default {
     }
   },
   methods: {
-    launch() {
+    launch(event) {
+      event.preventDefault();
+
       if(this.isDisabled) {
         return;
       }
 
-      console.log('Called');
       messenger.send('client:launch', this.username, this.password);
+    },
+    setServer(server) {
+      this.server = server;
     }
+  },
+  components: {
+    ServerList
   }
 }
 </script>

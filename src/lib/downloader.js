@@ -115,14 +115,14 @@ export default class Downloader {
         return response.headers["content-length"];
     }
 
-    launchGame(username, password) {
-        console.log('Called');
-        let process = spawn(`${this.unpackPath}/NFSW/nfsw.exe`, ['US', 'http://server.jvar.nl:3000/', username, password]);
+    launchGame(server, username, password) {
+        this.messenger.send('client:running', true);
+        let process = spawn(`${this.unpackPath}/NFSW/nfsw.exe`, ['US', server, password, username]);
         process
-            .on('spawn', () => {
-                this.messenger.send('client:running', true);
+            .on('exit', (code, signal) => {
+                this.messenger.send('client:running', false);
             })
-            .on('exit', () => {
+            .on('error', () => {
                 this.messenger.send('client:running', false);
             })
     }
