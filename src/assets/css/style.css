@@ -1,3 +1,20 @@
+:root {
+    --blue-ncs: #2589bdff;
+    --sweet-brown: #a63d40ff;
+    --black-olive: #343633ff;
+    --dutch-white: #d7c9aaff;
+    --cardinal: #c41e3dff;
+    --eerie-black: #20201D;
+
+    --background: var(--eerie-black);
+    --text: var(--dutch-white);
+    --border: var(--blue-ncs);
+
+    --border-radius: 25px;
+
+    --button-background: var(--sweet-brown);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -7,7 +24,13 @@
 body {
     font-family: "Arial", serif;
     padding: 20px;
-    background: #f6f6f6;
+    background: var(--background);
+    color: var(--text);
+    overflow: hidden;
+}
+
+select, button, input {
+    color: var(--text);
 }
 
 .header {
@@ -19,37 +42,67 @@ body {
     top: -10px;
     font-size: 16px;
     position: relative;
+    font-weight: 100;
 }
 
 .input {
     display: block;
     width: 100%;
     margin-bottom: 10px;
-    padding: 5px;
+    padding: 5px 10px;
     background: transparent;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     height: 35px;
-    border: 2px solid #d2d6ce;
-    /* w-full p-2 mb-4 h-12 bg-transparent rounded ring-2 ring-gray-400 focus:ring-blue-600 focus:outline-none */
+    border: 2px solid var(--border);
 }
 
 .input:focus {
     outline: none;
-    border-color: #9abeff;
 }
 
 .button {
     display: block;
     width: 100%;
-    height: 45px;
-    background: #77ff6d;
-    border-radius: 5px;
-    border: 2px solid #67cd65;
-    color: black;
+    height: 35px;
+    border: none;
+    background: var(--button-background);
+    border-radius: var(--border-radius);
 }
 
 .button:disabled {
     cursor: not-allowed;
-    background: #c4ffb9;
-    border-color: #93cd88;
+}
+
+.status-bar {
+    position: absolute;
+    bottom: -100%;
+    transition: all 2s;
+    width: 100%;
+    left: 0;
+    padding: 15px 20px 10px;
+    background: var(--black-olive);
+}
+
+.status-bar.is-visible {
+    bottom: 0;
+}
+
+.status-bar progress {
+    display: block;
+    width: 100%;
+    border-radius: 0;
+    height: 5px;
+    margin-bottom: 5px;
+}
+
+.status-bar progress::-webkit-progress-value {
+    transition: all .5s;
+    background: var(--cardinal);
+}
+
+.status-bar label {
+    width: 100%;
+    text-align: center;
+    display: block;
+    font-size: 80%;
 }

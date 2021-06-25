@@ -15,12 +15,15 @@
                 {{ message }}
             </button>
         </form>
+
+        <Status v-bind:is-done="isDone" v-bind:progress-message="progressMessage" v-bind:progress-percentage="progressPercentage" />
     </div>
 </template>
 
 <script>
 import Messenger from "../lib/messenger";
 import ServerList from './ServerList';
+import Status from "./Status";
 
 const messenger = new Messenger();
 
@@ -61,7 +64,7 @@ export default {
                 return 'Running!';
             }
 
-            return `${this.progressMessage} (${this.progressPercentage}%)`;
+            return `${this.progressMessage}, please wait`;
         }
     },
     methods: {
@@ -79,6 +82,7 @@ export default {
         }
     },
     components: {
+        Status,
         ServerList
     }
 }

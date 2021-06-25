@@ -94,7 +94,6 @@ export default class Downloader {
                 }
             }
         }).then(() => {
-            console.log('Ready');
             this.isWorking = false;
             this.messenger.send('client:ready');
         });

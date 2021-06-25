@@ -40,8 +40,8 @@ app.whenReady().then(() => {
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
-        width: 325,
-        height: 365,
+        width: 260,
+        height: 370,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
