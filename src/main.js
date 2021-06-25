@@ -6,14 +6,16 @@ const {app, BrowserWindow, autoUpdater, dialog} = require('electron');
 const server = 'http://server.jvar.nl:8123';
 const url = `${server}/update/${process.platform}/${app.getVersion()}`;
 
-autoUpdater.setFeedURL({url});
+if(!process.env.DEBUG) {
+    autoUpdater.setFeedURL({url});
 
-setInterval(() => {
-    autoUpdater.checkForUpdates()
-}, 60000);
+    setInterval(() => {
+        autoUpdater.checkForUpdates()
+    }, 60000);
 
-if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
-    app.quit();
+    if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
+        app.quit();
+    }
 }
 
 autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
@@ -48,7 +50,9 @@ const createWindow = () => {
 
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-    mainWindow.webContents.openDevTools();
+    if(process.env.DEBUG) {
+        mainWindow.webContents.openDevTools();
+    }
     mainWindow.setMenuBarVisibility(false);
 
     let messenger = new Messenger(mainWindow);

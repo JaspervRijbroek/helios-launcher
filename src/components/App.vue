@@ -72,7 +72,7 @@ export default {
                 return;
             }
 
-            messenger.send('client:launch', this.username, this.password);
+            messenger.send('client:launch', this.server, this.username, this.password);
         },
         setServer(server) {
             this.server = server;
