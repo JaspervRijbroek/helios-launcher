@@ -9,8 +9,6 @@
             <input type="text" class="input" id="username" placeholder="Username" v-model="username">
             <input type="password" class="input" id="password" placeholder="Password" v-model="password">
 
-            <ServerList v-on:change-server="setServer"/>
-
             <button class="button" :disabled="isDisabled" type="submit">
                 {{ message }}
             </button>
@@ -22,7 +20,6 @@
 
 <script>
 import Messenger from "../lib/messenger";
-import ServerList from './ServerList';
 import Status from "./Status";
 
 const messenger = new Messenger();
@@ -31,7 +28,6 @@ export default {
     created() {
         messenger
             .on('status:update', (message, percentage) => {
-                console.log(message, percentage)
                 this.progressMessage = message;
                 this.progressPercentage = percentage;
             })
@@ -50,7 +46,7 @@ export default {
         progressPercentage: '',
         username: '',
         password: '',
-        server: null
+        server: 'https://helios.jvar.nl:3003'
     }),
     computed: {
         isDisabled() {
@@ -81,8 +77,7 @@ export default {
         }
     },
     components: {
-        Status,
-        ServerList
+        Status
     }
 }
 </script>
