@@ -2,7 +2,7 @@
     <div>
         <h2 class="header">
             Helios <br />
-            <small>Need for Speed: World</small>
+            <small>Need for Speed World</small>
         </h2>
 
         <form v-on:submit="launch">
@@ -31,6 +31,7 @@ export default {
     created() {
         messenger
             .on('status:update', (message, percentage) => {
+                console.log(message, percentage)
                 this.progressMessage = message;
                 this.progressPercentage = percentage;
             })
@@ -53,8 +54,6 @@ export default {
     }),
     computed: {
         isDisabled() {
-            console.log(this.server);
-
             return !this.server || this.isRunning || !this.isDone;
         },
         message() {

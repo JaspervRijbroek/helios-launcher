@@ -5,6 +5,17 @@ rules.push({
   test: /\.css$/,
   use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
 });
+rules.push({
+    test: /\.ttf$/,
+    use: [
+        {
+            loader: 'url-loader',
+            options: {
+                name: './font/[hash].[ext]',
+            },
+        },
+    ]
+})
 
 module.exports = {
   // Put your normal webpack config below here

@@ -10,7 +10,7 @@ export default class Downloader {
     constructor(messenger) {
         this.tempFile = app.getPath('temp') + '/nfsw.tgz';
         this.unpackPath = app.getPath('documents');
-        this.downloadUrl = 'http://server.jvar.nl/NFSW.tgz';
+        this.downloadUrl = 'https://helios.jvar.nl/NFSW.tgz';
         this.messenger = messenger;
         this.isWorking = false;
 
@@ -39,6 +39,7 @@ export default class Downloader {
             return this.messenger.emit('unpack:start');
         }
 
+        console.log('Download');
         return this.messenger.emit('download:start');
     }
 
